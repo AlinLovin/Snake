@@ -1,12 +1,20 @@
 #container {
 	outline: 1px solid black;
 	position: relative;
+	width: 340px;
 }
 
 .grid {
 	display: grid;
 	grid-template-columns: repeat(17, 20px);
 	grid-template-rows: repeat(15, 20px);
+}
+
+.tail {
+	position: absolute;
+	background-color: green;
+	height: 20px;
+	width: 20px;
 }
 
 #score {
@@ -18,10 +26,18 @@
 	margin: 10px;
 }
 
-#snake {
+p {
+	font-size: 40px;
+}
+
+#btn {
+	display: none;
+}
+
+#candy {
 	position: absolute;
 	height: 20px;
 	width: 20px;
-	background-color: red;	
+	background-color: blue;	
 }
 
