@@ -1,19 +1,19 @@
 var arrayGrid = [];
-var t;
-var test = 0;
-var aux = 0;
+var timing;
+var divTail;
 var snake;
 var candy;
-var score = 0;
+var score;
 var record = 0;
-var xPosSnake = 60;
-var yPosSnake = 140;
-var xPosCandy = 240;
-var yPosCandy = 140;
-var way = "";
-var gameOver = 1;
+var xPosSnake;
+var yPosSnake;
+var xPosCandy;
+var yPosCandy;
+var way;
+var gameOver;
+document.onkeydown = ways;
 
-// Creez tabela si pozitionez sarpele si mancarea
+// Create table.
 window.onload = function() {
 	var area = document.getElementById("table");
 	var dash = "-";
@@ -33,49 +33,96 @@ window.onload = function() {
 				document.getElementById('' + row + dash + col).style.backgroundColor = "#e6ecff";
 				color = 1;
 			}
-			arrayGrid[row][col] = 0;
 		}
 	}
+
 	snake = document.getElementById("0");
 	candy = document.getElementById("candy");
+	play();
+}
+
+// I put the snake and the food on the table.
+function play() {
+	for (let i = 1; i <= score; ++i) {
+		var removeTail = document.getElementById(i);
+		removeTail.remove();
+	}
+
+	gameOver = 1;
+	xPosSnake = 60;
+	yPosSnake = 140;
+	xPosCandy = 240;
+	yPosCandy = 140;
+	way = "";
+	divTail = 0;
+	score = 0;
+
+	snake.style.left = xPosSnake + 'px';
+	snake.style.top = yPosSnake + 'px';
+	snake.style.width = 20 + 'px';
+	snake.style.height = 20 + 'px';
+	snake.style.position = "absolute";
+	snake.style.backgroundColor = "red";
 
 	candy.style.top = yPosCandy + 'px';
 	candy.style.left = xPosCandy + 'px';
 
-	snake.style.width = 20 + 'px';
-	snake.style.height = 20 + 'px';
-	snake.style.left = xPosSnake + 'px';
-	snake.style.top = yPosSnake + 'px';
+	clearTimeout(timing);
+	document.getElementById("btn").style.display = "none";
+	document.getElementById("gameState").innerHTML = "";
+	document.getElementById("score").innerHTML = "Score: " + score;
 }
-document.onkeydown = ways;
 
-// Schimb directia sarpelui
-// Verific daca si-a mancat coada
-// Verific daca a mancat 
+// Directs the snake.
+function ways(e) {
+	if ((e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) && gameOver == 1) {
+		if (way != e.keyCode) {
+			if (way == "") {
+				moveSnake(e);
+				way = e.keyCode;
+			} else if ((way == 37 || way == 38) && (e.keyCode != way + 2)) {
+				clearTimeout(timing);
+				moveSnake(e);
+				way = e.keyCode;
+			} else if ((way == 39 || way == 40) && (e.keyCode != way - 2)) {
+				clearTimeout(timing);
+				moveSnake(e);
+				way = e.keyCode;
+			}
+		}
+	}
+}
+
+// Change the direction of the snake.
+// I'm checking to see if the snake ate its tail or its food.
 function moveSnake(e) {
-
 	if (gameOver == 1) {
-		t = setTimeout(function() {moveSnake(e)}, 100);
+		timing = setTimeout(function() {moveSnake(e)}, 100);
 	}
 
 	for (let i = score; i >= 1; --i) {
 		document.getElementById(i).style.left = document.getElementById(i - 1).style.left;
 		document.getElementById(i).style.top = document.getElementById(i - 1).style.top;
+		if (i % 2 != 0) {
+			document.getElementById(i).style.backgroundColor = "#ff8080";
+		} else {
+			document.getElementById(i).style.backgroundColor = "#ff6666";
+		}
 	}
 
-	if (e.keyCode == 38) { // up 38
+	if (e.keyCode == 38) { // up
 		yPosSnake -= 20;
 	}
 
-	if (e.keyCode == 40) { // down 40
+	if (e.keyCode == 40) { // down
 		yPosSnake += 20;
 	}
 
-	if (e.keyCode == 39) { // right 39
+	if (e.keyCode == 39) { // right
 		xPosSnake += 20;
 	}
 
-	if (e.keyCode == 37) { // left 37
+	if (e.keyCode == 37) { // left
 		xPosSnake -= 20;
 	}
 
@@ -90,7 +137,7 @@ function moveSnake(e) {
 	}
 
 	if (xPosSnake < 0 || xPosSnake > 320 || yPosSnake < 0 || yPosSnake > 280) {
-		clearTimeout(t);
+		clearTimeout(timing);
 		gameOver = 0;
 		document.getElementById("gameState").innerHTML = "GAME OVER";
 		document.getElementById("btn").style.display = "block";
@@ -104,28 +151,8 @@ function moveSnake(e) {
 		grow(xPosSnake, yPosSnake);
 	}
 }
-// document.onkeydown = ways;
 
-function ways(e) {
-	if ((e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) && gameOver == 1) {
-		if (way != e.keyCode) {
-			if (way == "") {
-				moveSnake(e);
-				way = e.keyCode;
-			} else if ((way == 37 || way == 38) && (e.keyCode != way + 2)) {
-				clearTimeout(t);
-				moveSnake(e);
-				way = e.keyCode;
-			} else if ((way == 39 || way == 40) && (e.keyCode != way - 2)) {
-				clearTimeout(t);
-				moveSnake(e);
-				way = e.keyCode;
-			}
-		}
-	}
-}
-
-// Plasez mancarea pe tabela astfel incat ea sa nu se plaseze pe coada sarpelui
+// Place the food on the table so that it does not fall on the snake's tail
 function placeFood() {
 	var place = 0;
 	var x;
@@ -157,46 +184,13 @@ function placeFood() {
 	}
 }
 
-// Lungesc sarpele
+// Increase the length of the snake
 function grow(x, y) {
-	++aux;
+	++divTail;
 	area = document.getElementById("snakeTail");
-	area.innerHTML += '<div class="tail" id="'+ aux +'">';
+	area.innerHTML += '<div class="tail" id="'+ divTail +'">';
 
-	document.getElementById(aux).style.left = x +'px';
-	document.getElementById(aux).style.top = y +'px';
-
+	document.getElementById(divTail).style.left = x +'px';
+	document.getElementById(divTail).style.top = y +'px';
 	area.innerHTML += '</div>';
-	
 }
-
-// Incep alt joc
-function hideShow() {
-	for (let i = 1; i <= score; ++i) {
-		var removeTail = document.getElementById(i);
-		removeTail.remove();
-	}
-
-	gameOver = 1;
-	xPosSnake = 60;
-	yPosSnake = 140;
-	xPosCandy = 240;
-	yPosCandy = 140;
-	way = "";
-	aux = 0;
-	score = 0;
-
-	snake.style.left = xPosSnake + 'px';
-	snake.style.top = yPosSnake + 'px';
-
-	candy.style.top = yPosCandy + 'px';
-	candy.style.left = xPosCandy + 'px';
-	clearTimeout(t);
-	document.getElementById("btn").style.display = "none";
-	document.getElementById("gameState").innerHTML = "";
-	document.getElementById("score").innerHTML = "Score: " + score;
-}
-
-// sa fac scorul
-// sa dau restart la joc cu ajutoul butonului
-// sa ascund butonul cat timp jocul merge

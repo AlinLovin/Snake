@@ -1,7 +1,13 @@
+body {
+	background-color: #e6ffee;
+}
+
 #container {
 	outline: 1px solid black;
 	position: relative;
 	width: 340px;
+	justify-content: center;
+	margin: auto;
 }
 
 .grid {
@@ -12,26 +18,28 @@
 
 .tail {
 	position: absolute;
-	background-color: green;
 	height: 20px;
 	width: 20px;
 }
 
-#score {
-	display: inline-block;
+#state {
+	text-align: center;
 }
 
-#record {
+#record, #score {
 	display: inline-block;
 	margin: 10px;
 }
 
-p {
-	font-size: 40px;
-}
-
 #btn {
 	display: none;
+	width: 70px;
+	height: 50px;
+	justify-content: center;
+	margin: auto;
+	background-color: #ccd9ff;
+	border: 1px solid;
+	border-radius: 10px;
 }
 
 #candy {
@@ -39,5 +47,11 @@ p {
 	height: 20px;
 	width: 20px;
 	background-color: blue;	
+	border-radius: 50%;
+}
+
+p, h1 {
+	text-align: center;
+	font-size: 40px;
 }
 
