@@ -1,16 +1,7 @@
 var arrayGrid = [];
-var timing;
-var divTail;
-var snake;
-var candy;
-var score;
-var record = 0;
-var xPosSnake;
-var yPosSnake;
-var xPosCandy;
-var yPosCandy;
-var way;
-var gameOver;
+var timing, divTail, way, gameOver;
+var snake, candy, score, record = 0;
+var xPosSnake, yPosSnake, xPosCandy, yPosCandy;
 document.onkeydown = ways;
 
 // Create table.
